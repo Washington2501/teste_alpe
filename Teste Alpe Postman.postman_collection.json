@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "808fb743-784f-49dd-a9a8-2f1c992ac23c",
+		"name": "Teste Alpe Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8512018"
+	},
+	"item": [
+		{
+			"name": "Criar produto",
+			"item": [
+				{
+					"name": "Cenário: Criando novo produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"ID_PRODUTO\", jsonData.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Produto A\",\r\n    \"price\": {{$randomInt}},\r\n    \"description\": \"Descrição do Produto A\",\r\n    \"categoryId\": 2,\r\n    \"images\": [\r\n        \"https://i.imgur.com/6Xeqn2s.png\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PLATZI}}/products",
+							"host": [
+								"{{URL_PLATZI}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Obter produto",
+			"item": [
+				{
+					"name": "Cenário: Lendo todos os produtos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Product must have all properties\", function (){\r",
+									"    pm.expect(jsonData).to.be.an(\"array\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"price\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"images\");\r",
+									"    pm.expect(jsonData[0].images).to.be.an(\"array\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PLATZI}}/products",
+							"host": [
+								"{{URL_PLATZI}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cenário: Lendo os detalhes de um produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Product must have all properties\", function (){\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"price\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"images\");\r",
+									"    pm.expect(jsonData.images).to.be.an(\"array\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PLATZI}}/products/{{ID_PRODUTO}}",
+							"host": [
+								"{{URL_PLATZI}}"
+							],
+							"path": [
+								"products",
+								"{{ID_PRODUTO}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Atualizar produto",
+			"item": [
+				{
+					"name": "Cenário: Atualizando um produto existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Product must have all properties\", function (){\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"price\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"images\");\r",
+									"    pm.expect(jsonData.images).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All the updated properties must be correct\", function (){\r",
+									"    pm.expect(jsonData.title).to.eql(\"Produto B\");\r",
+									"    pm.expect(jsonData.description).to.eql(\"Descrição do Produto B\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Produto B\",\r\n  \"description\": \"Descrição do Produto B\",\r\n  \"images\": [\r\n        \"https://i.imgur.com/dI7EAC4.png\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PLATZI}}/products/{{ID_PRODUTO}}",
+							"host": [
+								"{{URL_PLATZI}}"
+							],
+							"path": [
+								"products",
+								"{{ID_PRODUTO}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Deletar produto",
+			"item": [
+				{
+					"name": "Cenário: Deletando um produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PLATZI}}/products/{{ID_PRODUTO}}",
+							"host": [
+								"{{URL_PLATZI}}"
+							],
+							"path": [
+								"products",
+								"{{ID_PRODUTO}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL_PLATZI",
+			"value": "https://api.escuelajs.co/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "ID_PRODUTO",
+			"value": ""
+		}
+	]
+}
